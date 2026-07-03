@@ -9,6 +9,14 @@ on:
 permissions:
   contents: write
 
+# Garante que só uma execução deste workflow rode por vez. Se uma nova for
+# disparada (manual ou agendada) enquanto outra ainda está rodando, ela
+# espera na fila em vez de rodar em paralelo — evita que duas execuções
+# tentem dar "git push" ao mesmo tempo e uma sobrescreva a outra.
+concurrency:
+  group: funil-deploy
+  cancel-in-progress: false
+
 jobs:
   gerar-funil:
     runs-on: ubuntu-latest
@@ -38,6 +46,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin main
           cp saidas/funil_comercial_amara.html index.html
           git add index.html
           git diff --staged --quiet || git commit -m "Atualiza funil comercial"
