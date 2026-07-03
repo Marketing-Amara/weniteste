@@ -46,7 +46,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase origin main
           cp saidas/funil_comercial_amara.html index.html
           git add index.html
           git diff --staged --quiet || git commit -m "Atualiza funil comercial"
